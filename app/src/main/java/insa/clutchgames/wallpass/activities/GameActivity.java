@@ -33,13 +33,11 @@ public class GameActivity extends AppCompatActivity
     @Override
     protected void onPause() {
         super.onPause();
-        gameView.pause();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        gameView.resume();
     }
     public void onWindowFocusChanged(boolean hasFocus)
     {
