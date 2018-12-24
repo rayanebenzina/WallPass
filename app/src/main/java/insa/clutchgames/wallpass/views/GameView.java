@@ -11,6 +11,7 @@ import android.view.SurfaceView;
 import android.view.WindowManager;
 
 import insa.clutchgames.wallpass.models.Balle;
+import insa.clutchgames.wallpass.models.Mur;
 import insa.clutchgames.wallpass.threads.GameLoopThread;
 
 
@@ -18,12 +19,14 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
     private GameLoopThread gameThread;
     private Balle balle;
+    private Mur mur;
 
     public GameView(Context context) {
         super(context);
         getHolder().addCallback(this);
         gameThread=new GameLoopThread(this);
         balle = new Balle(100,100,10 , 10,30,300,300);
+        mur = new Mur(300,300,45,200);
 
     }
 
@@ -34,6 +37,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     public void doDraw(Canvas c) {
         c.drawColor(Color.argb(255,255,230,204));
         balle.draw(c);
+        mur.draw(c);
     }
 
     private void control() {
