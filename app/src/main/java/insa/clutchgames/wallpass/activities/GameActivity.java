@@ -4,6 +4,7 @@ package insa.clutchgames.wallpass.activities;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 
 import insa.clutchgames.wallpass.views.GameView;
@@ -17,8 +18,6 @@ public class GameActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
 
         gameView = new GameView(this);
-        gameView.setBackgroundColor(Color.argb(255,255,230,204));
-
         setContentView(gameView);
 
         getWindow().getDecorView().setSystemUiVisibility(

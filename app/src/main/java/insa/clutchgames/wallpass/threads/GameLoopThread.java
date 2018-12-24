@@ -1,6 +1,8 @@
 package insa.clutchgames.wallpass.threads;
 
 import android.graphics.Canvas;
+import android.util.Log;
+import android.view.SurfaceHolder;
 
 import insa.clutchgames.wallpass.views.GameView;
 

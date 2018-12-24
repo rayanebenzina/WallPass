@@ -16,32 +16,24 @@ import insa.clutchgames.wallpass.threads.GameLoopThread;
 
 public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
-    volatile boolean running;
+    private GameLoopThread gameThread;
     private Balle balle;
-    private GameLoopThread gameThread = null;
-
-    private Paint paint;
-    private Canvas canvas;
-    private SurfaceHolder surfaceHolder;
 
     public GameView(Context context) {
         super(context);
-        balle = new Balle(15, 13, 0 , 0, 5, this.getHeight(),this.getWidth());
-
-        surfaceHolder = getHolder();
-        paint = new Paint();
+        getHolder().addCallback(this);
+        gameThread=new GameLoopThread(this);
+        balle = new Balle(100,100,10 , 10,30,300,300);
 
     }
-
 
     public void update() {
         balle.moveWithCollisionDetection();
     }
 
     public void doDraw(Canvas c) {
-
-            c.drawColor(Color.argb(255,255,128,0));
-            c.drawCircle(balle.getX(),balle.getY(), balle.getRayon(),paint);
+        c.drawColor(Color.argb(255,255,230,204));
+        balle.draw(c);
     }
 
     private void control() {
@@ -54,11 +46,10 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
     @Override
     public void surfaceCreated(SurfaceHolder surfaceHolder) {
-        if(gameThread.getState()==Thread.State.TERMINATED) {
-            gameThread=new GameLoopThread(this);
-        }
         gameThread.setRunning(true);
         gameThread.start();
+        balle.setPosition(getWidth()/2, getHeight()/2);
+        balle.resize(getWidth(),getHeight());
     }
 
     @Override
@@ -74,6 +65,5 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         }
     }
     public void surfaceChanged(SurfaceHolder surfaceHolder, int i, int w, int h) {
-        balle.resize(w,h); // on définit la taille de la balle selon la taille de l'écran
     }
 }
