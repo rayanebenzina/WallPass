@@ -99,10 +99,10 @@ public class Balle
                                     )
         );
         return (CollideTools.collideOBB_PointF(wallCorners,4, new PointF(x, y)) ||
-        CollideTools.collisionSegment(m.getTopLeftCorner(), m.getBottomLeftCorner(), new PointF(x, y), rayon) ||
-        CollideTools.collisionSegment(m.getBottomLeftCorner(), m.getBottomRightCorner(), new PointF(x, y), rayon) ||
-        CollideTools.collisionSegment(m.getBottomRightCorner(), m.getTopRightCorner(), new PointF(x, y), rayon) ||
-        CollideTools.collisionSegment(m.getTopRightCorner(), m.getTopLeftCorner(), new PointF(x, y), rayon));
+        CollideTools.collideSegment(m.getTopLeftCorner(), m.getBottomLeftCorner(), new PointF(x, y), rayon) ||
+        CollideTools.collideSegment(m.getBottomLeftCorner(), m.getBottomRightCorner(), new PointF(x, y), rayon) ||
+        CollideTools.collideSegment(m.getBottomRightCorner(), m.getTopRightCorner(), new PointF(x, y), rayon) ||
+        CollideTools.collideSegment(m.getTopRightCorner(), m.getTopLeftCorner(), new PointF(x, y), rayon));
 
     }
 

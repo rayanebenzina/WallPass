@@ -7,7 +7,7 @@ import java.util.Vector;
 public class CollideTools{
 
 
-    public static boolean collisionPointCercle(PointF point, PointF cercle, double rayon)
+    public static boolean collidePointCircle(PointF point, PointF cercle, double rayon)
     {
         double d2 = (point.x - cercle.x) * (point.x - cercle.x) + (point.y - cercle.y) * (point.y-cercle.y);
         if (d2 > rayon * rayon)
@@ -16,7 +16,7 @@ public class CollideTools{
             return true;
     }
 
-    public static boolean collisionDroite(PointF A,PointF B, PointF C, double rayon)
+    public static boolean collideLine(PointF A, PointF B, PointF C, double rayon)
     {
         PointF u = new PointF();
         u.x = B.x - A.x;
@@ -35,9 +35,9 @@ public class CollideTools{
             return false;
     }
 
-    public static boolean collisionSegment(PointF A,PointF B, PointF C, double rayon)
+    public static boolean collideSegment(PointF A, PointF B, PointF C, double rayon)
     {
-        if (!collisionDroite(A,B,C,rayon))
+        if (!collideLine(A,B,C,rayon))
             return false;  // si on ne touche pas la droite, on ne touchera jamais le segment
         PointF AB = new PointF();
         PointF AC = new PointF();
@@ -53,9 +53,9 @@ public class CollideTools{
         if ( pscal1>=0 && pscal2>=0 )
             return true;   // I entre A et B, ok.
         // dernière possibilité, A ou B dans le cercle
-        if (collisionPointCercle(A, C, rayon))
+        if (collidePointCircle(A, C, rayon))
             return true;
-        if (collisionPointCercle(B, C, rayon))
+        if (collidePointCircle(B, C, rayon))
             return true;
         return false;
     }
