@@ -8,10 +8,14 @@ public class Balle extends Circle
 {
     private float vx, vy, h, w;
     private Paint paint;
+    private boolean transparent;
+    private boolean colliding;
 
     public Balle(float x, float y, float vx, float vy, float radius, int h, int w)
     {
         super(x,y,radius);
+        this.transparent = false;
+        this.colliding = false;
         this.vx = vx;
         this.vy = vy;
         this.h = h;
@@ -39,5 +43,28 @@ public class Balle extends Circle
     public void draw(Canvas canvas)
     {
         canvas.drawCircle(x,y,radius,paint);
+    }
+
+    public boolean isTransparent() {
+        return transparent;
+    }
+
+    public void setTransparent(boolean transparent) {
+        this.transparent = transparent;
+
+        if(transparent)
+            paint.setColor(Color.argb(55,255,115,35));
+        else
+            paint.setColor(Color.argb(255,255,115,35));
+
+    }
+
+
+    public boolean isColliding() {
+        return colliding;
+    }
+
+    public void setColliding(boolean colliding) {
+        this.colliding = colliding;
     }
 }

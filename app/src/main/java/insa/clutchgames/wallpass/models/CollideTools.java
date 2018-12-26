@@ -7,11 +7,11 @@ public class CollideTools{
 
 
 
-    private static PointF rotate(PointF center, PointF point, float angle)
+    public static PointF rotate(PointF center, PointF point, float angle)
     {
         return  rotate(center.x, center.y, point.x, point.y, angle);
     }
-    private static PointF rotate(float cx, float cy, float px, float py, float angle)
+    public static PointF rotate(float cx, float cy, float px, float py, float angle)
     {
         //translate
         float tmpX = px - cx;
