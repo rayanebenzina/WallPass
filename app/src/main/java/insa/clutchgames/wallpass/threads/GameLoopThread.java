@@ -1,14 +1,11 @@
 package insa.clutchgames.wallpass.threads;
 
 import android.graphics.Canvas;
-import android.util.Log;
-import android.view.SurfaceHolder;
 
 import insa.clutchgames.wallpass.views.GameView;
 
 public class GameLoopThread extends Thread
 {
-
     private final static int FRAMES_PER_SECOND = 60;
     private final static int SKIP_TICKS = 1000 / FRAMES_PER_SECOND;
 
