@@ -1,10 +1,11 @@
 package insa.clutchgames.wallpass.models;
 
-import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.view.Display;
+import android.graphics.PointF;
+
+import java.util.Vector;
 
 public class Balle
 {
@@ -56,6 +57,55 @@ public class Balle
         this.w = w;
         this.h = h;
     }
+
+    private PointF rotatePoint(PointF center, PointF point, float angle){
+        //translate
+        float tempX = point.x - center.x;
+        float tempY = point.y - center.y;
+
+        // apply rotation
+        double theta = angle * Math.PI / 180;
+        double rotatedX = tempX*Math.cos(theta) - tempY*Math.sin(theta);
+        double rotatedY = tempX*Math.sin(theta) + tempY*Math.cos(theta);
+
+        // translate back
+        return  new PointF( (float)(rotatedX + center.x), (float) (rotatedY + center.y));
+    }
+
+    public boolean collideWall(Mur m){
+        Vector<PointF> wallCorners = new Vector<>();
+        wallCorners.add( rotatePoint(
+                                        new PointF(m.getX(), m.getY()),
+                                        m.getTopLeftCorner(),
+                                        m.getAngle()
+                                    )
+        );
+        wallCorners.add( rotatePoint(
+                                        new PointF(m.getX(), m.getY()),
+                                        m.getBottomLeftCorner(),
+                                        m.getAngle()
+                                    )
+        );
+        wallCorners.add( rotatePoint(
+                                        new PointF(m.getX(), m.getY()),
+                                        m.getBottomRightCorner(),
+                                        m.getAngle()
+                                    )
+        );
+        wallCorners.add( rotatePoint(
+                                        new PointF(m.getX(), m.getY()),
+                                        m.getTopRightCorner(),
+                                        m.getAngle()
+                                    )
+        );
+        return (CollideTools.collideOBB_PointF(wallCorners,4, new PointF(x, y)) ||
+        CollideTools.collisionSegment(m.getTopLeftCorner(), m.getBottomLeftCorner(), new PointF(x, y), rayon) ||
+        CollideTools.collisionSegment(m.getBottomLeftCorner(), m.getBottomRightCorner(), new PointF(x, y), rayon) ||
+        CollideTools.collisionSegment(m.getBottomRightCorner(), m.getTopRightCorner(), new PointF(x, y), rayon) ||
+        CollideTools.collisionSegment(m.getTopRightCorner(), m.getTopLeftCorner(), new PointF(x, y), rayon));
+
+    }
+
     public void draw(Canvas canvas)
     {
         canvas.drawCircle(x,y,rayon,paint);
