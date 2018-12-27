@@ -39,17 +39,17 @@ public class CollideTools{
     {
         return rotate(new Vector2D(cx,cy),new Vector2D(px,py),angle);
     }
-    public static boolean Circle_OBB(Circle C, RectF R, float angle)
+    public static Vector2D Circle_OBB(Circle C, RectF R, float angle)
     {
         C = C.copy();
         C.setPos(rotate(R.centerX(),R.centerY(),C.p.x,C.p.y, -angle));
         return Circle_AABB(C,R);
     }
-    public static boolean Circle_AABB(Circle C, RectF R)
+    public static Vector2D Circle_AABB(Circle C, RectF R)
     {
         Vector2D nP = nearestPoint(C,R);
         Vector2D d = Vector2D.sub(C.p,nP);
-        return d.getNorm2() < (C.radius * C.radius);
+        return (d.getNorm2() < (C.radius * C.radius)) ? nP : null;
     }
     public static Vector2D nearestPoint(Circle C, RectF R)
     {

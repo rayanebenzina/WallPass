@@ -7,8 +7,6 @@ import android.graphics.Color;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import java.util.Vector;
-import android.graphics.PointF;
-import android.graphics.RectF;
 import android.os.Handler;
 import android.view.MotionEvent;
 import android.view.View;
@@ -42,8 +40,8 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         gameThread=new GameLoopThread(this);
         murs = new Vector<Mur>();
         balle = new Balle(100,100,15 , 15,60,300,300);
-        murs.add(new Mur(300,300,87,200));
-        murs.add(new Mur(600,300,10,350, 70));
+        murs.add(new Mur(300,300,0,200));
+        murs.add(new Mur(600,600,0,350));
 
         this.setOnTouchListener(new OnTouchListener() {
             @Override
@@ -67,80 +65,23 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
         for (Mur m :murs)
         {
-            if(CollideTools.Circle_OBB(balle,m,m.getAngle()))
+            Vector2D nP = CollideTools.Circle_OBB(balle, m, m.getAngle());
+
+            if (nP != null)
             {
                 balle.setColliding(true);
-                if(!balle.isTransparent())
-                {
-                    m.setColor(Color.argb(50,155,15,0));
-
-                    Vector2D A = new Vector2D();
-                    Vector2D B = new Vector2D();
-
-                    RectF box = balle.getRotatedBox(m.centerX(), m.centerY(), m.getAngle());
-                    RectF oldBox = balle.getRotatedOldBox(m.centerX(), m.centerY(), m.getAngle());
-
-                    boolean getNewVect = false;
-                    if(balle.collidedFromLeft(box, oldBox,m)){
-                        A.y = m.bottom;
-                        B.y = m.top;
-                        A.x = B.x = m.left;
-                        getNewVect = true;
-                        System.out.println("LEFT");
-                    }
-                    else if(balle.collidedFromTop(box, oldBox, m)){
-                        A.x = m.left;
-                        B.x = m.right;
-                        A.y = B.y = m.top;
-                        System.out.println("TOP");
-                        getNewVect = true;
-                    }
-                    else if(balle.collidedFromRight(box, oldBox, m)){
-                        A.y = m.top;
-                        B.y = m.bottom;
-                        A.x = B.x = m.right;
-                        System.out.println("RIGHT");
-                        getNewVect = true;
-                    }
-                    else if(balle.collidedFromBottom(box, oldBox, m)){
-                        A.x = m.right;
-                        B.x = m.left;
-                        A.y = B.y = m.bottom;
-                        System.out.println("BOTTOM");
-                        getNewVect = true;
-                    }
-                    else {
-                        /**
-                         *
-                         *
-                         * NORMALEMENT ON NE DOIT JAMAIS ENTRER DANS CE ELSE
-                         *
-                         *
-                         * MAIS CA ARRIVE :-(
-                         * quand ca arrive je fais exist
-                         */
-                        System.out.println("Aucun côte");
-                        System.exit(-1);
-                    }
-
-                    if(getNewVect) {
-                        A = CollideTools.rotate(m.getCenter(), A, m.getAngle());
-                        B = CollideTools.rotate(m.getCenter(), B, m.getAngle());
-                        Vector2D normale = Vector2D.sub(B,A).getNormal();
-                        normale.normalize();
-                        System.out.println("Normale " + normale);
-                        PointF v2 = CollideTools.calculerVecteurV2(balle.v, normale);
-                        System.out.println("V " + balle.v);
-                        balle.p.set(balle.oldPos);
-                        balle.v.set(v2);
-                        System.out.println("V2 " + v2);
-                        System.out.println("New direction");
-                    }
+                if (!balle.isTransparent()) {
+                    Vector2D N = Vector2D.sub(balle.p, nP);
+                    N.normalize();
+                    Vector2D v2 = CollideTools.calculerVecteurV2(balle.v, N);
+                    balle.v.set(v2);
                 }
             }
-            else {
+            else
+            {
                 balle.setColliding(false);
-                if (!balle.isTransparent()){
+                if (!balle.isTransparent())
+                {
                     m.setColor(Color.argb(255, 255, 115, 0));
                 }
             }
@@ -171,7 +112,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                 gameThread.join();
                 retry = false;
             }
-            catch (InterruptedException e) {}
+            catch (InterruptedException ignored) {}
         }
     }
     public void surfaceChanged(SurfaceHolder surfaceHolder, int i, int w, int h)

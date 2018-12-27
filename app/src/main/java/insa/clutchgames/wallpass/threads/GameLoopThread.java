@@ -46,7 +46,7 @@ public class GameLoopThread extends Thread
             try {
                 if (sleepTime >= 0) {sleep(sleepTime);}
             }
-            catch (Exception e) {}
+            catch (Exception ignored) {}
         }
     }
 
