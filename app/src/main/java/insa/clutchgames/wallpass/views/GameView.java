@@ -127,16 +127,12 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                         System.exit(-1);
                     }
 
-//                    C.x = balle.x;
-//                    C.y = balle.y;
                     if(getNewVect) {
                         A = CollideTools.rotate(m.getCenter(), A, m.getAngle());
                         B = CollideTools.rotate(m.getCenter(), B, m.getAngle());
                         C = CollideTools.rotate(m.getCenter(), C, m.getAngle());
                         PointF normale = CollideTools.getNormale(A, B, C);
                         System.out.println("Normale [" + normale + "]");
-                        //normale = CollideTools.rotate(m.getCenter(), normale, m.getAngle());
-                        System.out.println("Normale apres rotation [" + normale + "]");
                         PointF v2 = CollideTools.calculerVecteurV2(new PointF(balle.vx, balle.vy), normale);
                         System.out.println("V = ( x = [" + balle.vx + "] y= [" + balle.vy + "] )");
                         balle.vx = v2.x;
