@@ -9,7 +9,7 @@ import android.view.View;
 import insa.clutchgames.wallpass.R;
 
 public class SplashScreen extends Activity {
-    private static int SPLASH_TIME_OUT = 3000;
+    private static int SPLASH_TIME_OUT = 0000;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

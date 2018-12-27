@@ -4,6 +4,8 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.PointF;
+import android.graphics.RectF;
 import android.os.Build;
 import android.os.Handler;
 import android.view.MotionEvent;
@@ -42,7 +44,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         getHolder().addCallback(this);
         gameThread=new GameLoopThread(this);
 
-        balle = new Balle(100,100,2 , 2,60,300,300);
+        balle = new Balle(100,100,15 , 15,60,300,300);
         mur = new Mur(300,300,87,200);
         mur2 = new Mur(600,300,10,350, 70);
 
@@ -76,6 +78,72 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                 balle.setColliding(true);
                 if(!balle.isTransparent()){
                     m.setColor(Color.argb(50,155,15,0));
+                    PointF A = new PointF();
+                    PointF B = new PointF();
+                    PointF C =  new PointF(balle.x,balle.y);
+                    C = CollideTools.rotate(m.getCenter(),C,-m.getAngle());
+                    RectF box = balle.getRotatedBox(m.centerX(), m.centerY(), m.getAngle());
+                    RectF oldBox = balle.getRotatedOldBox(m.centerX(), m.centerY(), m.getAngle());
+                    boolean getNewVect = false;
+                    if(balle.collidedFromLeft(box, oldBox,m)){
+                        A.y = m.bottom;
+                        B.y = m.top;
+                        A.x = B.x = m.left;
+                        getNewVect = true;
+                        System.out.println("LEFT");
+                    }
+                    else if(balle.collidedFromTop(box, oldBox, m)){
+                        A.x = m.left;
+                        B.x = m.right;
+                        A.y = B.y = m.top;
+                        System.out.println("TOP");
+                        getNewVect = true;
+                    }
+                    else if(balle.collidedFromRight(box, oldBox, m)){
+                        A.y = m.top;
+                        B.y = m.bottom;
+                        A.x = B.x = m.right;
+                        System.out.println("RIGHT");
+                        getNewVect = true;
+                    }
+                    else if(balle.collidedFromBottom(box, oldBox, m)){
+                        A.x = m.right;
+                        B.x = m.left;
+                        A.y = B.y = m.bottom;
+                        System.out.println("BOTTOM");
+                        getNewVect = true;
+                    }
+                    else {
+                        /**
+                         *
+                         *
+                         * NORMALEMENT ON NE DOIT JAMAIS ENTRER DANS CE ELSE
+                         *
+                         *
+                         * MAIS CA ARRIVE :-(
+                         * quand ca arrive je fais exist
+                         */
+                        System.out.println("Aucun côte");
+                        System.exit(-1);
+                    }
+
+//                    C.x = balle.x;
+//                    C.y = balle.y;
+                    if(getNewVect) {
+                        A = CollideTools.rotate(m.getCenter(), A, m.getAngle());
+                        B = CollideTools.rotate(m.getCenter(), B, m.getAngle());
+                        C = CollideTools.rotate(m.getCenter(), C, m.getAngle());
+                        PointF normale = CollideTools.getNormale(A, B, C);
+                        System.out.println("Normale [" + normale + "]");
+                        //normale = CollideTools.rotate(m.getCenter(), normale, m.getAngle());
+                        System.out.println("Normale apres rotation [" + normale + "]");
+                        PointF v2 = CollideTools.calculerVecteurV2(new PointF(balle.vx, balle.vy), normale);
+                        System.out.println("V = ( x = [" + balle.vx + "] y= [" + balle.vy + "] )");
+                        balle.vx = v2.x;
+                        balle.vy = v2.y;
+                        System.out.println("V2 = ( x = [" + v2.x + "] y= [" + v2.y + "] )");
+                        System.out.println("New direction");
+                    }
                 }
             }
             else {
