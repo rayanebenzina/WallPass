@@ -4,20 +4,18 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.PointF;
-import android.graphics.RectF;
-import android.os.Build;
-import android.os.Handler;
-import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.View;
-
 import java.util.Vector;
-
+import android.graphics.PointF;
+import android.graphics.RectF;
+import android.os.Handler;
+import android.view.MotionEvent;
+import android.view.View;
 import insa.clutchgames.wallpass.models.Balle;
 import insa.clutchgames.wallpass.models.CollideTools;
 import insa.clutchgames.wallpass.models.Mur;
+import insa.clutchgames.wallpass.models.Vector2D;
 import insa.clutchgames.wallpass.threads.GameLoopThread;
 
 
@@ -25,7 +23,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
     private GameLoopThread gameThread;
     private Balle balle;
-    private Mur mur, mur2;
     private Vector<Mur> murs;
     private final Handler handler = new Handler();
     private final Runnable runnable = new Runnable() {
@@ -43,14 +40,10 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         super(context);
         getHolder().addCallback(this);
         gameThread=new GameLoopThread(this);
-
+        murs = new Vector<Mur>();
         balle = new Balle(100,100,15 , 15,60,300,300);
-        mur = new Mur(300,300,87,200);
-        mur2 = new Mur(600,300,10,350, 70);
-
-        murs = new Vector<>();
-        murs.add(mur);
-        murs.add(mur2);
+        murs.add(new Mur(300,300,87,200));
+        murs.add(new Mur(600,300,10,350, 70));
 
         this.setOnTouchListener(new OnTouchListener() {
             @Override
@@ -72,18 +65,21 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     {
         balle.moveWithCollisionDetection();
 
-        for (Mur m :murs) {
+        for (Mur m :murs)
+        {
             if(CollideTools.Circle_OBB(balle,m,m.getAngle()))
             {
                 balle.setColliding(true);
-                if(!balle.isTransparent()){
+                if(!balle.isTransparent())
+                {
                     m.setColor(Color.argb(50,155,15,0));
-                    PointF A = new PointF();
-                    PointF B = new PointF();
-                    PointF C =  new PointF(balle.x,balle.y);
-                    C = CollideTools.rotate(m.getCenter(),C,-m.getAngle());
+
+                    Vector2D A = new Vector2D();
+                    Vector2D B = new Vector2D();
+
                     RectF box = balle.getRotatedBox(m.centerX(), m.centerY(), m.getAngle());
                     RectF oldBox = balle.getRotatedOldBox(m.centerX(), m.centerY(), m.getAngle());
+
                     boolean getNewVect = false;
                     if(balle.collidedFromLeft(box, oldBox,m)){
                         A.y = m.bottom;
@@ -130,14 +126,14 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                     if(getNewVect) {
                         A = CollideTools.rotate(m.getCenter(), A, m.getAngle());
                         B = CollideTools.rotate(m.getCenter(), B, m.getAngle());
-                        C = CollideTools.rotate(m.getCenter(), C, m.getAngle());
-                        PointF normale = CollideTools.getNormale(A, B, C);
-                        System.out.println("Normale [" + normale + "]");
-                        PointF v2 = CollideTools.calculerVecteurV2(new PointF(balle.vx, balle.vy), normale);
-                        System.out.println("V = ( x = [" + balle.vx + "] y= [" + balle.vy + "] )");
-                        balle.vx = v2.x;
-                        balle.vy = v2.y;
-                        System.out.println("V2 = ( x = [" + v2.x + "] y= [" + v2.y + "] )");
+                        Vector2D normale = Vector2D.sub(B,A).getNormal();
+                        normale.normalize();
+                        System.out.println("Normale " + normale);
+                        PointF v2 = CollideTools.calculerVecteurV2(balle.v, normale);
+                        System.out.println("V " + balle.v);
+                        balle.p.set(balle.oldPos);
+                        balle.v.set(v2);
+                        System.out.println("V2 " + v2);
                         System.out.println("New direction");
                     }
                 }
@@ -155,8 +151,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     {
         c.drawColor(Color.argb(255,255,230,204));
         balle.draw(c);
-        mur.draw(c);
-        mur2.draw(c);
+        for(Mur mur : murs ) mur.draw(c);
     }
 
 

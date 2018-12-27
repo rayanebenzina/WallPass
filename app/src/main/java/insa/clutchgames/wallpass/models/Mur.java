@@ -4,14 +4,13 @@ package insa.clutchgames.wallpass.models;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.PointF;
 import android.graphics.RectF;
 
 public class Mur extends RectF
 {
     private float angle;
     private Paint paint;
-    private PointF center;
+    private Vector2D center;
 
     public Mur(float x, float y,float angle, float width)
     {
@@ -29,7 +28,7 @@ public class Mur extends RectF
         this.top = y-height/2;
         this.bottom = y+height/2;
 
-        this.center = new PointF(x,y);
+        this.center = new Vector2D(x,y);
     }
     public void setColor(int color)
     {
@@ -39,7 +38,7 @@ public class Mur extends RectF
     public float getAngle() {
         return angle;
     }
-    public PointF getCenter()
+    public Vector2D getCenter()
     {
         return center;
     }

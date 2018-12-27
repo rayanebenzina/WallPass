@@ -1,6 +1,5 @@
 package insa.clutchgames.wallpass.models;
 
-import android.graphics.PointF;
 import android.graphics.RectF;
 
 import java.util.Vector;
@@ -8,99 +7,69 @@ import java.util.Vector;
 public class CollideTools{
 
 
-    public  static PointF/*Vecteur*/ calculerVecteurV2(PointF v, PointF N) //Vecteurs: V vitesse de la balle, N: la normale au point d'impact
+    public  static Vector2D calculerVecteurV2(Vector2D v, Vector2D N) //Vecteurs: V vitesse de la balle, N: la normale au point d'impact
     {
-        PointF v2 = new PointF();
-        float pscal = (v.x*N.x +  v.y*N.y);
-        v2.x = v.x -2*pscal*N.x;
-        v2.y = v.y -2*pscal*N.y;
-        return v2;
+        Vector2D D = Vector2D.sub( v,Vector2D.mul( N,2*Vector2D.dot(v,N) ));
+        return D;
     }
 
-    public static PointF /* Le point I de collision */ projectionI(PointF A,PointF B,PointF C)
+    public static Vector2D /* Le point I de collision */ projectionI(Vector2D A,Vector2D B,Vector2D C)
     {
-        PointF u = new PointF(); //vecteur
-        PointF AC = new PointF(); //vecteur
-        u.x = B.x - A.x;
-        u.y = B.y - A.y;
-        AC.x = C.x - A.x;
-        AC.y = C.y - A.y;
-        float ti = (u.x*AC.x + u.y*AC.y)/(u.x*u.x + u.y*u.y);
-        PointF I = new PointF();
-        I.x = A.x + ti*u.x;
-        I.y = A.y + ti*u.y;
+        Vector2D u = Vector2D.sub(B,A);
+        Vector2D AC = Vector2D.sub(C,A);
+        float ti = Vector2D.dot(AC,u)/u.getNorm2();
+        Vector2D I = Vector2D.sum(A,Vector2D.mul(u,ti));
         return I;
     }
 
-    public static PointF /*Vecteur N la normale*/ getNormale(PointF A, PointF B, PointF C)
-    {
-        PointF AC = new PointF(); //vecteur
-        PointF u = new PointF(); //vecteur
-        PointF N = new PointF(); //vecteur
-        u.x = B.x - A.x;
-        u.y = B.y - A.y;
-        AC.x = C.x - A.x;
-        AC.y = C.y - A.y;
-        float parenthesis = u.x*AC.y-u.y*AC.x;  // calcul une fois pour les deux
-        N.x = -u.y*(parenthesis);
-        N.y = u.x*(parenthesis);
-        // normalisons
-        float norme = (float)Math.sqrt(N.x*N.x + N.y*N.y);
-        N.x/=norme;
-        N.y/=norme;
-        return N;
-    }
-
-    public static RectF createBox(PointF p, float radius){
+    public static RectF createBox(Vector2D p, float radius){
         return createBox(p.x, p.y, radius);
     }
 
     public static RectF createBox(float x, float y, float radius){
         return new RectF(x-radius, y-radius, x+radius, y+radius);
     }
-    public static PointF rotate(PointF center, PointF point, float angle)
+    public static Vector2D rotate(Vector2D center, Vector2D point, float angle)
     {
-        return  rotate(center.x, center.y, point.x, point.y, angle);
+        Vector2D tmp = Vector2D.sub(point,center);
+        tmp.rotate(angle);
+        return  Vector2D.sum(tmp,center);
     }
-    public static PointF rotate(float cx, float cy, float px, float py, float angle)
+    public static Vector2D rotate(float cx, float cy, float px, float py, float angle)
     {
-        //translate
-        float tmpX = px - cx;
-        float tmpY = py - cy;
-        // apply rotation
-        double theta = angle * Math.PI / 180;
-        double rotatedX = tmpX * Math.cos(theta) - tmpY * Math.sin(theta);
-        double rotatedY = tmpX * Math.sin(theta) + tmpY * Math.cos(theta);
-
-        // translate back
-        return  new PointF( (float)(rotatedX + cx), (float) (rotatedY + cy));
+        return rotate(new Vector2D(cx,cy),new Vector2D(px,py),angle);
     }
     public static boolean Circle_OBB(Circle C, RectF R, float angle)
     {
         C = C.copy();
-        C.setPos(rotate(R.centerX(),R.centerY(),C.x,C.y, -angle));
+        C.setPos(rotate(R.centerX(),R.centerY(),C.p.x,C.p.y, -angle));
         return Circle_AABB(C,R);
     }
     public static boolean Circle_AABB(Circle C, RectF R)
     {
-        float dx = C.x - Math.max(R.left, Math.min(C.x, R.right));
-        float dy = C.y - Math.max(R.top, Math.min(C.y, R.bottom));
-        return ( dx*dx + dy*dy ) < (C.radius * C.radius);
+        Vector2D nP = nearestPoint(C,R);
+        Vector2D d = Vector2D.sub(C.p,nP);
+        return d.getNorm2() < (C.radius * C.radius);
+    }
+    public static Vector2D nearestPoint(Circle C, RectF R)
+    {
+        return new Vector2D(Math.max(R.left, Math.min(C.p.x, R.right)),Math.max(R.top, Math.min(C.p.y, R.bottom)));
     }
 
-    public static boolean collideOBB_PointF(Vector<PointF> tab, PointF P)
+    public static boolean collideOBB_PointF(Vector<Vector2D> tab, Vector2D P)
     {
         int i;
         for(i=0;i<tab.size();i++)
         {
-            PointF A = tab.get(i);
-            PointF B;
+            Vector2D A = tab.get(i);
+            Vector2D B;
             if (i==tab.size()-1)  // si c'est le dernier point, on relie au premier
                 B = tab.get(0);
             else           // sinon on relie au suivant.
                 B = tab.get(i+1);
-            PointF D = new PointF(0, 0);
-            PointF T = new PointF(0,0);
+
+            Vector2D D = Vector2D.sub(B,A);
+            Vector2D T = Vector2D.sub(P,A);
             D.x = B.x - A.x;
             D.y = B.y - A.y;
             T.x = P.x - A.x;
