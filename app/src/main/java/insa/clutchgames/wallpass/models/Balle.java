@@ -25,7 +25,7 @@ public class Balle
         w = world;
         BodyDef bd = new BodyDef();
         bd.type = BodyType.DYNAMIC;
-        bd.position.set(x,y);
+        bd.position.set(x/w.ratio,y);
         body = world.createBody(bd);
         CircleShape circle = new CircleShape();
         circle.m_radius=radius;
