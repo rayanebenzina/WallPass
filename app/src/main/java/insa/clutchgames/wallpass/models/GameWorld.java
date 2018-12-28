@@ -24,14 +24,18 @@ public class GameWorld extends World {
     {
         screen = new Vec2(width,height);
         ratio = height/width;
-        balle = new Balle(this, 55,90,0,-5,3);
+        balle = new Balle(this, 55,90,0,-40,3);
 
         murs.add(new Mur(this,50,99.5f,0,99));
         murs.add(new Mur(this,50,0.5f,0,99));
         murs.add(new Mur(this,0.5f,50,90,100));
         murs.add(new Mur(this,99.5f,50,90,100));
 
-        murs.add(new Mur(this,50,50,90,30,5));
+        murs.add(new Mur(this,75,25,90,30,3));
+        murs.add(new Mur(this,50,50,90,30,3));
+        murs.add(new Mur(this,25,75,90,30,3));
+        murs.add(new Mur(this,25,25,90,30,3));
+        murs.add(new Mur(this,75,75,90,30,3));
     }
     public void step()
     {
