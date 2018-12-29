@@ -2,6 +2,7 @@ package insa.clutchgames.wallpass.views;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import insa.clutchgames.wallpass.models.GameWorld;
@@ -33,6 +34,15 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
     }
 
+    @Override
+    public boolean onTouchEvent(MotionEvent event)
+    {
+        if(event.getAction() == MotionEvent.ACTION_DOWN)
+        {
+            w.onClick();
+        }
+        return super.onTouchEvent(event);
+    }
 
     @Override
     public void surfaceCreated(SurfaceHolder surfaceHolder) {

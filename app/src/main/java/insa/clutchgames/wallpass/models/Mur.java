@@ -18,32 +18,44 @@ public class Mur
     private float angle,width,height;
     private Vec2 p;
     private  GameWorld world;
-    private Paint paint;
+    public Paint paint;
     private Body body;
+    public int mask;
 
     public Mur(GameWorld w, float x, float y,float angle, float width)
     {
-        this(w,x,y,angle,width,2);
+        this(w,x,y,angle,width,w.FMURS,w.FBALLE,3);
     }
-
-    public Mur(GameWorld w,float x, float y, float angle, float width, float height)
+    public Mur(GameWorld w, float x, float y,float angle, float width,float height)
+    {
+        this(w,x,y,angle,width,w.FMURS,w.FBALLE,height);
+    }
+    public Mur(GameWorld w, float x, float y,float angle, float width, int  categoryBits, int maskBits)
+    {
+        this(w,x,y,angle,width,categoryBits,maskBits,3);
+    }
+    public Mur(GameWorld w,float x, float y, float angle, float width, int  categoryBits, int maskBits, float height)
     {
         this.world = w;
         this.angle = angle;
         this.width = width;
         this.height = height;
         this.paint = new Paint();
+        this.mask = categoryBits;
         this.p = new Vec2(x/w.ratio,y);
-        this.paint.setColor(Color.argb(255,155,15,0));
+        this.paint.setColor(Color.argb(255,255,115,35));
         BodyDef bd = new BodyDef();
         bd.type = BodyType.STATIC;
         body = world.createBody(bd);
+        body.setUserData(this);
         PolygonShape ps = new PolygonShape();
         ps.setAsBox(width/2 - height/2,height/2,p,(float) (angle/180*Math.PI));
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = ps;
         fixtureDef.friction = 0;
         fixtureDef.restitution = 1;
+        fixtureDef.filter.categoryBits = categoryBits;
+        fixtureDef.filter.maskBits = maskBits;
         body.createFixture(fixtureDef);
 
 
@@ -61,7 +73,10 @@ public class Mur
         fd1.shape = c1;
         fd1.friction = 0;
         fd1.restitution = 1;
+        fd1.filter.categoryBits = categoryBits;
+        fd1.filter.maskBits = maskBits;
         b1.createFixture(fd1);
+
 
         bd.position.set(x/w.ratio + v.x,y + v.y);
         b1 = world.createBody(bd);
