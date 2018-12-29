@@ -44,9 +44,13 @@ public class Balle
         paint.setAntiAlias(true);
     }
 
-    public void draw(Canvas canvas)
+    public void draw(Canvas canvas, double interpolation)
     {
         Vec2 n = w.worldToScreen(body.getPosition());
-        canvas.drawCircle(n.x,n.y,w.radiusToScreen(radius),paint);
+        Vec2 v = body.getLinearVelocity();
+        interpolation = interpolation *0.09;
+//        System.out.println("vecteur = [" + v + "], interpolation = [" + interpolation + "]");
+        canvas.drawCircle((float) (n.x + interpolation * v.x), (float) (n.y + interpolation * v.y),w.radiusToScreen(radius),paint);
+//        canvas.drawCircle(n.x,n.y,w.radiusToScreen(radius),paint);
     }
 }

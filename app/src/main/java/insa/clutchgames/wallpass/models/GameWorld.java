@@ -66,12 +66,12 @@ public class GameWorld extends World {
 
     }
 
-    public void draw(Canvas c)
+    public void draw(Canvas c, double interpolation)
     {
         if(screen!=null)
         {
             c.drawColor(Color.argb(255,253,224,195));
-            balle.draw(c);
+            balle.draw(c, interpolation);
             for(Mur mur : murs) mur.draw(c);
         }
 

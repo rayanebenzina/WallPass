@@ -34,10 +34,9 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
 
 
-    public void doDraw(Canvas c)
+    public void doDraw(Canvas c, double interpolation)
     {
-        w.draw(c);
-
+        w.draw(c, interpolation);
     }
 
     @Override
@@ -54,9 +53,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     public void surfaceCreated(SurfaceHolder surfaceHolder) {
         w.init(getWidth(),getHeight());
         gameThread.setRunning(true);
-        ScheduledExecutorService ses = Executors.newSingleThreadScheduledExecutor();
-        ses.scheduleAtFixedRate(gameThread, 0, GameLoopThread.SKIP_TICKS, TimeUnit.MILLISECONDS);
-
+        gameThread.start();
 
     }
 
