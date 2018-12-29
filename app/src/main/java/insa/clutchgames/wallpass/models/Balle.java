@@ -41,6 +41,7 @@ public class Balle
         body.setUserData(2);
         paint = new Paint();
         paint.setColor(Color.argb(255,255,115,35));
+        paint.setAntiAlias(true);
     }
 
     public void draw(Canvas canvas)

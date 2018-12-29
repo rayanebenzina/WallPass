@@ -17,7 +17,7 @@ import java.util.Vector;
 public class GameWorld extends World {
 
     private Balle balle;
-    public int nb = 0;
+    public int nb = 0,nb2 =0;
     public final int FBALLE = 0x0001, FLIMITES = 0x0002, FMURS = 0x0004;
     double t;
     private float dt = 1f/60f;
@@ -90,14 +90,6 @@ public class GameWorld extends World {
 
         @Override
         public void preSolve(Contact contact, Manifold manifold) {
-            if(contact.getFixtureA().getBody().getUserData().equals(1) && contact.getFixtureB().getBody().getUserData().equals(2))
-            {
-                contact.getFixtureB().setSensor(false);
-            }
-            if(contact.getFixtureA().getBody().getUserData().equals(2) && contact.getFixtureB().getBody().getUserData().equals(1))
-            {
-                contact.getFixtureA().setSensor(false);
-            }
 
         }
         @Override
@@ -111,6 +103,7 @@ public class GameWorld extends World {
             {
                 if(contact.getFixtureA().getFilterData().categoryBits == FLIMITES)
                 {
+                    nb2++;
                     contact.getFixtureB().setSensor(false);
 
                     balle.paint.setColor(Color.argb(255,255,115,35));
@@ -125,6 +118,7 @@ public class GameWorld extends World {
             {
                 if(contact.getFixtureB().getFilterData().categoryBits == FLIMITES)
                 {
+                    nb2++;
                     contact.getFixtureA().setSensor(false);
 
                     balle.paint.setColor(Color.argb(255,255,115,35));
@@ -141,6 +135,10 @@ public class GameWorld extends World {
         public void endContact(Contact contact) {
             if(contact.getFixtureA().getBody().getUserData().equals(2) && contact.getFixtureB().getBody().getUserData().equals(1))
             {
+                if(contact.getFixtureB().getFilterData().categoryBits == FLIMITES)
+                {
+                    nb2--;
+                }
                 if(contact.getFixtureB().getFilterData().categoryBits == FMURS)
                 {
                     nb--;
@@ -154,6 +152,10 @@ public class GameWorld extends World {
             }
             if(contact.getFixtureA().getBody().getUserData().equals(1) && contact.getFixtureB().getBody().getUserData().equals(2))
             {
+                if(contact.getFixtureA().getFilterData().categoryBits == FLIMITES)
+                {
+                    nb2--;
+                }
                 if(contact.getFixtureA().getFilterData().categoryBits == FMURS)
                 {
                     nb--;
@@ -177,10 +179,9 @@ public class GameWorld extends World {
         }
         else
         {
-
-            balle.f.setSensor(true);
+            if(nb2==0) balle.f.setSensor(true);
             handler.removeCallbacks(r);
-            handler.postDelayed(r,500);
+            handler.postDelayed(r,300);
             balle.paint.setColor(Color.argb(155,255,115,35));
         }
     }
