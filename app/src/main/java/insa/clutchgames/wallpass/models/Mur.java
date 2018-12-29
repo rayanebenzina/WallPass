@@ -7,10 +7,14 @@ import android.graphics.Paint;
 
 import org.jbox2d.collision.shapes.CircleShape;
 import org.jbox2d.collision.shapes.PolygonShape;
+import org.jbox2d.common.Mat22;
+import org.jbox2d.common.Settings;
+import org.jbox2d.common.Transform;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;
 import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.BodyType;
+import org.jbox2d.dynamics.Fixture;
 import org.jbox2d.dynamics.FixtureDef;
 
 public class Mur
@@ -50,8 +54,6 @@ public class Mur
         bd.type = BodyType.STATIC;
         body = world.createBody(bd);
         body.setUserData(1);
-        System.out.println(body.getUserData());
-
         PolygonShape ps = new PolygonShape();
         ps.setAsBox(width/2 - height/2,height/2,p,(float) (angle/180*Math.PI));
         FixtureDef fixtureDef = new FixtureDef();
@@ -66,28 +68,29 @@ public class Mur
         Vec2 v = new Vec2(width/2 - height/2,0);
         rotate(v,angle);
 
-        bd = new BodyDef();
-        bd.type = BodyType.STATIC;
-        bd.position.set(x/w.ratio - v.x,y - v.y);
-
-        Body b1 = world.createBody(bd);
         CircleShape c1 = new CircleShape();
         c1.m_radius=height/2;
+        c1.m_p.x = x/w.ratio - v.x;
+        c1.m_p.y = y - v.y;
         FixtureDef fd1 = new FixtureDef();
         fd1.shape = c1;
         fd1.friction = 0;
         fd1.restitution = 1;
         fd1.filter.categoryBits = categoryBits;
         fd1.filter.maskBits = maskBits;
-        b1.createFixture(fd1);
-        b1.setUserData(1);
+        body.createFixture(fd1);
 
-
-        bd.position.set(x/w.ratio + v.x,y + v.y);
-        b1 = world.createBody(bd);
-        b1.createFixture(fd1);
-        b1.setUserData(1);
-
+        c1 = new CircleShape();
+        c1.m_radius=height/2;
+        c1.m_p.x = x/w.ratio + v.x;
+        c1.m_p.y = y + v.y;
+        fd1 = new FixtureDef();
+        fd1.shape = c1;
+        fd1.friction = 0;
+        fd1.restitution = 1;
+        fd1.filter.categoryBits = categoryBits;
+        fd1.filter.maskBits = maskBits;
+        body.createFixture(fd1);
     }
     public void setColor(int color)
     {

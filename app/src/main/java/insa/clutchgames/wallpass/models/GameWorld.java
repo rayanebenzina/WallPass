@@ -2,14 +2,11 @@ package insa.clutchgames.wallpass.models;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
-
-import org.jbox2d.callbacks.ContactFilter;
 import org.jbox2d.callbacks.ContactImpulse;
 import org.jbox2d.callbacks.ContactListener;
-import org.jbox2d.collision.Collision;
 import org.jbox2d.collision.Manifold;
+import org.jbox2d.common.Settings;
 import org.jbox2d.common.Vec2;
-import org.jbox2d.dynamics.Filter;
 import org.jbox2d.dynamics.World;
 import org.jbox2d.dynamics.contacts.Contact;
 
@@ -18,6 +15,7 @@ import java.util.Vector;
 public class GameWorld extends World {
 
     private Balle balle;
+    public int nb = 0;
     public final int FBALLE = 0x0001, FLIMITES = 0x0002, FMURS = 0x0004;
     double t;
     private float dt = 1f/60f;
@@ -51,11 +49,9 @@ public class GameWorld extends World {
     {
         if(screen != null)
             super.step(dt,6,3);
+
     }
-    public void setScreen(Vec2 screen)
-    {
-        this.screen = screen;
-    }
+
     public void draw(Canvas c)
     {
         if(screen!=null)
@@ -77,59 +73,88 @@ public class GameWorld extends World {
 
     public class MyContactListener implements ContactListener
     {
+
         @Override
         public void preSolve(Contact contact, Manifold manifold) {
 
-
         }
-
         @Override
         public void postSolve(Contact contact, ContactImpulse contactImpulse) {
         }
 
         @Override
         public void beginContact(Contact contact) {
-
             if(contact.getFixtureA().getBody().getUserData().equals(1) && contact.getFixtureB().getBody().getUserData().equals(2))
             {
                 if(contact.getFixtureA().getFilterData().categoryBits == FLIMITES)
                 {
                     contact.getFixtureB().setSensor(false);
-                    contact.setEnabled(true);
+
+                    balle.paint.setColor(Color.argb(255,255,115,35));
+                    contact.update(this);
+                }
+                if(contact.getFixtureA().getFilterData().categoryBits == FMURS)
+                {
+                    nb++;
                 }
             }
             if(contact.getFixtureA().getBody().getUserData().equals(2) && contact.getFixtureB().getBody().getUserData().equals(1))
             {
                 if(contact.getFixtureB().getFilterData().categoryBits == FLIMITES)
                 {
-                    contact.setEnabled(true);
                     contact.getFixtureA().setSensor(false);
+
+                    balle.paint.setColor(Color.argb(255,255,115,35));
+                    contact.update(this);
+                }
+                if(contact.getFixtureB().getFilterData().categoryBits == FMURS)
+                {
+                    nb++;
                 }
             }
 
         }
-
         @Override
         public void endContact(Contact contact) {
+            if(contact.getFixtureA().getBody().getUserData().equals(2) && contact.getFixtureB().getBody().getUserData().equals(1))
+            {
+                if(contact.getFixtureB().getFilterData().categoryBits == FMURS)
+                {
+                    nb--;
+                    if(nb==0)
+                    {
+                        contact.getFixtureA().setSensor(false);
+                        balle.paint.setColor(Color.argb(255,255,115,35));
+                    }
 
+                }
+            }
+            if(contact.getFixtureA().getBody().getUserData().equals(1) && contact.getFixtureB().getBody().getUserData().equals(2))
+            {
+                if(contact.getFixtureA().getFilterData().categoryBits == FMURS)
+                {
+                    nb--;
+                    if(nb==0)
+                    {
+                        contact.getFixtureB().setSensor(false);
+                        balle.paint.setColor(Color.argb(255, 255, 115, 35));
+                    }
+                }
+            }
 
         }
     }
 
     public void onClick()
     {
-        Filter f1 = balle.f.getFilterData();
-
-        if(f1.maskBits == FLIMITES)
+        if(balle.f.isSensor())
         {
-            f1.maskBits = FLIMITES | FMURS;
             balle.f.setSensor(false);
             balle.paint.setColor(Color.argb(255,255,115,35));
         }
         else
         {
             balle.f.setSensor(true);
-            f1.maskBits = FLIMITES;
             balle.paint.setColor(Color.argb(155,255,115,35));
         }
     }

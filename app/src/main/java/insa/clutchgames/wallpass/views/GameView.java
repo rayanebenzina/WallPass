@@ -23,6 +23,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
     public void update()
     {
+
         w.step();
     }
 
