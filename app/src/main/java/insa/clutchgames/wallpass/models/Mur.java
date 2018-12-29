@@ -44,10 +44,14 @@ public class Mur
         this.mask = categoryBits;
         this.p = new Vec2(x/w.ratio,y);
         this.paint.setColor(Color.argb(255,255,115,35));
+
+
         BodyDef bd = new BodyDef();
         bd.type = BodyType.STATIC;
         body = world.createBody(bd);
-        body.setUserData(this);
+        body.setUserData(1);
+        System.out.println(body.getUserData());
+
         PolygonShape ps = new PolygonShape();
         ps.setAsBox(width/2 - height/2,height/2,p,(float) (angle/180*Math.PI));
         FixtureDef fixtureDef = new FixtureDef();
@@ -76,11 +80,13 @@ public class Mur
         fd1.filter.categoryBits = categoryBits;
         fd1.filter.maskBits = maskBits;
         b1.createFixture(fd1);
+        b1.setUserData(1);
 
 
         bd.position.set(x/w.ratio + v.x,y + v.y);
         b1 = world.createBody(bd);
         b1.createFixture(fd1);
+        b1.setUserData(1);
 
     }
     public void setColor(int color)

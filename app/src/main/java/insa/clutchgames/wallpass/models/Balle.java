@@ -38,6 +38,7 @@ public class Balle
         fixtureDef.filter.maskBits = maskBits;
         f = body.createFixture(fixtureDef);
         body.setLinearVelocity(new Vec2(vx,vy));
+        body.setUserData(2);
         paint = new Paint();
         paint.setColor(Color.argb(255,255,115,35));
     }

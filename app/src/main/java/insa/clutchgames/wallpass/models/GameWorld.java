@@ -44,7 +44,7 @@ public class GameWorld extends World {
 
         murs.add(new Mur(this,50,55,45,30,3));
         murs.add(new Mur(this,50,20,0,30,3));
-        //this.setContactListener(new MyContactListener());
+        this.setContactListener(new MyContactListener());
 
     }
     public void step()
@@ -79,26 +79,7 @@ public class GameWorld extends World {
     {
         @Override
         public void preSolve(Contact contact, Manifold manifold) {
-            if(contact.getFixtureA().getUserData().getClass() == Mur.class && contact.getFixtureB().getUserData().getClass() == Balle.class)
-            {
-                Mur m = (Mur) contact.getFixtureA().getUserData();
-                Balle b = (Balle) contact.getFixtureB().getUserData();
-                if(m.mask == FLIMITES)
-                {
-                    contact.setEnabled(true);
-                    b.f.setSensor(false);
-                }
-            }
-            if(contact.getFixtureA().getUserData().getClass() == Balle.class && contact.getFixtureB().getUserData().getClass() == Mur.class)
-            {
-                Mur m = (Mur) contact.getFixtureB().getUserData();
-                Balle b = (Balle) contact.getFixtureA().getUserData();
-                if(m.mask == FLIMITES)
-                {
-                    contact.setEnabled(true);
-                    b.f.setSensor(false);
-                }
-            }
+
 
         }
 
@@ -108,6 +89,23 @@ public class GameWorld extends World {
 
         @Override
         public void beginContact(Contact contact) {
+
+            if(contact.getFixtureA().getBody().getUserData().equals(1) && contact.getFixtureB().getBody().getUserData().equals(2))
+            {
+                if(contact.getFixtureA().getFilterData().categoryBits == FLIMITES)
+                {
+                    contact.getFixtureB().setSensor(false);
+                    contact.setEnabled(true);
+                }
+            }
+            if(contact.getFixtureA().getBody().getUserData().equals(2) && contact.getFixtureB().getBody().getUserData().equals(1))
+            {
+                if(contact.getFixtureB().getFilterData().categoryBits == FLIMITES)
+                {
+                    contact.setEnabled(true);
+                    contact.getFixtureA().setSensor(false);
+                }
+            }
 
         }
 
@@ -121,20 +119,16 @@ public class GameWorld extends World {
     public void onClick()
     {
         Filter f1 = balle.f.getFilterData();
-        /*if(t - System.currentTimeMillis() > 500 && this.getBodyList().m_contactList)
-        {
-            t = System.currentTimeMillis();
-        }*/
 
         if(f1.maskBits == FLIMITES)
         {
             f1.maskBits = FLIMITES | FMURS;
-            //balle.f.setSensor(false);
+            balle.f.setSensor(false);
             balle.paint.setColor(Color.argb(255,255,115,35));
         }
         else
         {
-            //balle.f.setSensor(true);
+            balle.f.setSensor(true);
             f1.maskBits = FLIMITES;
             balle.paint.setColor(Color.argb(155,255,115,35));
         }
