@@ -2,6 +2,8 @@ package insa.clutchgames.wallpass.models;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.os.Handler;
+
 import org.jbox2d.callbacks.ContactImpulse;
 import org.jbox2d.callbacks.ContactListener;
 import org.jbox2d.collision.Manifold;
@@ -22,6 +24,18 @@ public class GameWorld extends World {
     public float ratio;
     private Vector<Mur> murs = new Vector<>();
     public Vec2 screen;
+    private  final Handler handler = new Handler();
+    private  boolean ishandleractive = false;
+    private Runnable r = new Runnable() {
+        @Override
+        public void run() {
+            if(nb == 0){
+                balle.f.setSensor(false);
+                balle.paint.setColor(Color.argb(255,255,115,35));
+            }
+
+        }
+    };
 
 
     public GameWorld()
@@ -147,14 +161,17 @@ public class GameWorld extends World {
 
     public void onClick()
     {
-        if(balle.f.isSensor())
+        if(balle.f.isSensor() && nb == 0)
         {
             balle.f.setSensor(false);
             balle.paint.setColor(Color.argb(255,255,115,35));
         }
         else
         {
+
             balle.f.setSensor(true);
+            handler.removeCallbacks(r);
+            handler.postDelayed(r,500);
             balle.paint.setColor(Color.argb(155,255,115,35));
         }
     }

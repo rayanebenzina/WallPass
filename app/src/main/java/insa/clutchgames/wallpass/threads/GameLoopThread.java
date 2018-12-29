@@ -1,6 +1,8 @@
 package insa.clutchgames.wallpass.threads;
 
 import android.graphics.Canvas;
+import android.os.Handler;
+
 
 import insa.clutchgames.wallpass.views.GameView;
 
@@ -13,7 +15,8 @@ public class GameLoopThread extends Thread
     private boolean running = false;
 
 
-    public GameLoopThread(GameView view) {
+    public GameLoopThread(GameView view)
+    {
         this.view = view;
     }
 
@@ -26,6 +29,8 @@ public class GameLoopThread extends Thread
     {
         long startTime;
         long sleepTime;
+
+
 
         while (running)
         {
