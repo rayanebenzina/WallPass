@@ -90,10 +90,19 @@ public class GameWorld extends World {
 
         @Override
         public void preSolve(Contact contact, Manifold manifold) {
+            if(contact.getFixtureA().getBody().getUserData().equals(1) && contact.getFixtureB().getBody().getUserData().equals(2))
+            {
+                contact.getFixtureB().setSensor(false);
+            }
+            if(contact.getFixtureA().getBody().getUserData().equals(2) && contact.getFixtureB().getBody().getUserData().equals(1))
+            {
+                contact.getFixtureA().setSensor(false);
+            }
 
         }
         @Override
         public void postSolve(Contact contact, ContactImpulse contactImpulse) {
+
         }
 
         @Override
