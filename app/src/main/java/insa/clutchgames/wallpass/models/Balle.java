@@ -2,51 +2,44 @@ package insa.clutchgames.wallpass.models;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
-import org.jbox2d.collision.shapes.CircleShape;
 import org.jbox2d.common.Vec2;
-import org.jbox2d.dynamics.Body;
-import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.BodyType;
-import org.jbox2d.dynamics.Fixture;
-import org.jbox2d.dynamics.FixtureDef;
+import org.jbox2d.dynamics.Filter;
 
 
-public class Balle
-{
-    private Body body;
-    public Paint paint;
-    private float radius;
-    private GameWorld w;
-    public Fixture f;
+public class Balle extends GameObject {
+    private Circle c;
 
-    public Balle(GameWorld world,float x, float y, float vx, float vy, float radius, int  categoryBits, int maskBits)
+    public Balle(GameWorld world, Viewport viewport, float x, float y, float vx, float vy, float radius) {
+        super(world, BodyType.DYNAMIC, new Vec2(x, y), new Vec2(vx, vy), 0, 0x0001, Color.argb(255, 255, 115, 35));
+        c = new Circle(body, viewport, 0, 0, radius);
+        c.setFilter(0x0001, 0x0002 | 0x0004);
+    }
+
+    public void setCollidingWall()
     {
-        w = world;
-        BodyDef bd = new BodyDef();
-        bd.type = BodyType.DYNAMIC;
-        bd.position.set(x/w.ratio,y);
-        body = world.createBody(bd);
-        CircleShape circle = new CircleShape();
-        circle.m_radius=radius;
-        this.radius= radius;
-        FixtureDef fixtureDef = new FixtureDef();
-        fixtureDef.shape = circle;
-        fixtureDef.friction = 0;
-        fixtureDef.restitution = 1;
-        fixtureDef.filter.categoryBits = categoryBits;
-        fixtureDef.filter.maskBits = maskBits;
-        f = body.createFixture(fixtureDef);
-        body.setLinearVelocity(new Vec2(vx,vy));
-        body.setUserData(2);
-        paint = new Paint();
-        paint.setColor(Color.argb(255,255,115,35));
-        paint.setAntiAlias(true);
+        c.setFilter(0x0001, 0x0002 | 0x0004);
+        paint.setAlpha(255);
+    }
+
+    public void setNoCollindingWall()
+    {
+        c.setFilter(0x0001, 0x0002);
+        paint.setAlpha(155);
     }
 
     public void draw(Canvas canvas)
     {
-        Vec2 n = w.worldToScreen(body.getPosition());
-        canvas.drawCircle(n.x,n.y,w.radiusToScreen(radius),paint);
+        c.draw(canvas,paint);
+    }
+    public void setSensor(boolean sensor)
+    {
+        body.getFixtureList().setSensor(sensor);
+        paint.setAlpha(sensor?155:255);
+    }
+
+    public boolean isSensor()
+    {
+        return c.f.isSensor();
     }
 }
