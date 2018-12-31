@@ -1,7 +1,6 @@
 package insa.clutchgames.wallpass.models;
 
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 
 import org.jbox2d.common.Vec2;
@@ -27,7 +26,12 @@ public abstract class GameObject{
     }
     public abstract void draw(Canvas canvas);
 
-    public Vec2 getPosition()
+    void destroy(GameWorld w)
+    {
+        w.destroyBody(body);
+    }
+
+    Vec2 getPosition()
     {
         return body.getPosition();
     }

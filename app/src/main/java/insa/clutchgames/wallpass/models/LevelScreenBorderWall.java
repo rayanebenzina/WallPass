@@ -9,8 +9,9 @@ import java.util.Vector;
 public class LevelScreenBorderWall extends GameObject {
     private Vector<Rectangle> r = new Vector<>();
     private Viewport viewport;
-    private final float STRENGHT = 5, LENGHT_HOLE = 30;
-    LevelScreenBorderWall(GameWorld w,Viewport viewport,int numSortie)
+    private final float STRENGHT = 5;
+
+    LevelScreenBorderWall(GameWorld w,Viewport viewport,Vec2 posCenter,int numSortie)
     {
         super(w,BodyType.STATIC,new Vec2(),new Vec2(),0,0x0002,Color.BLUE);
         this.viewport = viewport;
@@ -23,7 +24,6 @@ public class LevelScreenBorderWall extends GameObject {
         Vec2 size = new Vec2();
         Vec2 pos = new Vec2();
         float angle;
-
         for(int i = 1; i<=4; i++)
         {
 
@@ -33,24 +33,26 @@ public class LevelScreenBorderWall extends GameObject {
             angle = i > 2 ? 90 : 0;
             if(i != numSortie)
             {
-                addRectangle(size.x,pos,angle);
+                addRectangle(size.x,pos.add(posCenter),angle);
             }
             else
             {
-                float sizetmp = size.x / 2 - LENGHT_HOLE/2;
+
+                float LENGHT_HOLE = 30;
+                float sizetmp = size.x / 2 - LENGHT_HOLE /2;
                 Vec2 tmpos = new Vec2();
                 tmpos.x = (pos.x==0)? - size.x/2 + sizetmp /2:pos.x;
                 tmpos.y = (pos.y==0)? - size.x/2 + sizetmp /2:pos.y;
-                addRectangle(sizetmp,tmpos,angle);
+                addRectangle(sizetmp,tmpos.add(posCenter),angle);
                 tmpos.x = (pos.x==0)? + size.x/2 - sizetmp /2:pos.x;
                 tmpos.y = (pos.y==0)? + size.x/2 - sizetmp /2:pos.y;
-                addRectangle(sizetmp,tmpos,angle);
+                addRectangle(sizetmp,tmpos.add(posCenter),angle);
             }
             r.get(i-1).setFilter(0x0002,0x0001);
         }
         r.get(4).setFilter(0x0002,0x0001);
     }
-    public void addRectangle(float size, Vec2 pos, float angle)
+    private void addRectangle(float size, Vec2 pos, float angle)
     {
         r.add(new Rectangle(body,viewport,new Vec2(size,STRENGHT),pos,angle));
     }

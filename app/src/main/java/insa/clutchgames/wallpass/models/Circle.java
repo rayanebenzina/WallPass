@@ -20,7 +20,7 @@ public class Circle implements CollidableShape, DrawableShape{
     private float radius,screenRadius;
     public Fixture f;
 
-    public Circle(Body body, Viewport viewport, Vec2 pos, float radius)
+    private Circle(Body body, Viewport viewport, Vec2 pos, float radius)
     {
         this.body = body;
         this.viewport = viewport;
@@ -29,7 +29,7 @@ public class Circle implements CollidableShape, DrawableShape{
         initPhysics();
         initGraphics();
     }
-    public Circle(Body body, Viewport viewport, float x, float y, float radius)
+    Circle(Body body, Viewport viewport, float x, float y, float radius)
     {
         this(body,viewport,new Vec2(x,y),radius);
     }

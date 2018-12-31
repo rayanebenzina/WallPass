@@ -13,7 +13,7 @@ public class SimpleRoundedWall extends GameObject
 
     public SimpleRoundedWall(GameWorld world, Viewport viewport, float x, float y, float angle, float width, float height)
     {
-        super(world,BodyType.STATIC,new Vec2(x,y),new Vec2(),angle,0x0004,Color.argb(255,255,115,35));
+        super(world,BodyType.STATIC,new Vec2(x,y*world.ratio),new Vec2(),angle,0x0004,Color.argb(255,255,115,35));
 
         r = new Rectangle(body,viewport,width-height,height);
         c1 = new Circle(body,viewport,-width/2 + height/2,0,height/2);

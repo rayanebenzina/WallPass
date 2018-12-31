@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<levels>
+    <level id="1" posx="0" posy="0">
+        <sortie num="2"/>
+        <balle x="0." y="33.3" vx="0." vy="-50."/>
+        <murs longueur="20." largeur="3.">
+            <mur x="33.3"      y="-33.3" angle="45."/>
+            <mur x="0."         y="-33.3" angle="-45."/>
+            <mur x="-33.3"     y="-33.3" angle="45."/>
+
+            <mur x="33.3"      y="0."     angle="45."/>
+            <mur x="0."         y="0."     angle="45."/>
+            <mur x="-33.3"     y="0."     angle="-45."/>
+
+            <mur x="33.3"      y="33.3"  angle="-45."/>
+            <mur x="-33.3"     y="33.3"  angle="45."/>
+        </murs>
+
+    </level>
+    <level id="2" posx="1" posy="1">
+        <sortie num="1"/>
+        <balle x="33.3" y="0." vx="-50." vy="0."/>
+        <murs longueur="20." largeur="3.">
+            <mur x="33.3"      y="-33.3" angle="45."/>
+            <mur x="0."         y="-33.3" angle="-45."/>
+            <mur x="-33.3"     y="-33.3" angle="45."/>
+
+            <mur x="0."         y="0."     angle="45."/>
+            <mur x="-33.3"     y="0."     angle="-45."/>
+
+            <mur x="0."         y="33.3"  angle="45."/>
+            <mur x="33.3"      y="33.3"  angle="-45."/>
+            <mur x="-33.3"     y="33.3"  angle="45."/>
+        </murs>
+
+    </level>
+    <level id="3" posx="1" posy="1">
+        <sortie num="3"/>
+        <balle x="33.3" y="0." vx="-50." vy="0."/>
+        <murs longueur="20." largeur="3.">
+            <mur x="33.3"      y="-33.3" angle="-45."/>
+            <mur x="0."         y="-33.3" angle="45."/>
+            <mur x="-33.3"     y="-33.3" angle="45."/>
+
+            <mur x="0."         y="0."     angle="-45."/>
+            <mur x="-33.3"     y="0."     angle="-45."/>
+
+            <mur x="0."         y="33.3"  angle="45."/>
+            <mur x="33.3"      y="33.3"  angle="-45."/>
+            <mur x="-33.3"     y="33.3"  angle="45."/>
+        </murs>
+
+    </level>
+    <level id="4" posx="1" posy="1">
+        <sortie num="1"/>
+        <balle x="33.3" y="0." vx="-50." vy="0."/>
+        <murs longueur="20." largeur="3.">
+            <mur x="33.3"      y="-33.3" angle="45."/>
+            <mur x="0."         y="-33.3" angle="-45."/>
+            <mur x="-33.3"     y="-33.3" angle="45."/>
+
+            <mur x="0."         y="0."     angle="45."/>
+            <mur x="-33.3"     y="0."     angle="-45."/>
+
+            <mur x="0."         y="33.3"  angle="-45."/>
+            <mur x="33.3"      y="33.3"  angle="-45."/>
+            <mur x="-33.3"     y="33.3"  angle="-45."/>
+        </murs>
+
+    </level>
+    <level id="5" posx="1" posy="1">
+        <sortie num="4"/>
+        <balle x="33.3" y="0." vx="-50." vy="0."/>
+        <murs longueur="20." largeur="3.">
+            <mur x="33.3"      y="-33.3" angle="45."/>
+            <mur x="0."         y="-33.3" angle="45."/>
+            <mur x="-33.3"     y="-33.3" angle="-45."/>
+
+            <mur x="0."         y="0."     angle="45."/>
+            <mur x="-33.3"     y="0."     angle="45."/>
+
+            <mur x="0."         y="33.3"  angle="90."/>
+            <mur x="33.3"      y="33.3"  angle="-45."/>
+            <mur x="-33.3"     y="33.3"  angle="45."/>
+        </murs>
+
+    </level>
+    <level id="6" posx="1" posy="1">
+        <sortie num="2"/>
+        <balle x="33.3" y="0." vx="-50." vy="0."/>
+        <murs longueur="20." largeur="3.">
+            <mur x="33.3"      y="-33.3" angle="45."/>
+            <mur x="0."         y="-33.3" angle="-45."/>
+            <mur x="-33.3"     y="-33.3" angle="45."/>
+
+            <mur x="0."         y="0."     angle="45."/>
+            <mur x="-33.3"     y="0."     angle="-45."/>
+
+            <mur x="0."         y="33.3"  angle="45."/>
+            <mur x="33.3"      y="33.3"  angle="-45."/>
+            <mur x="-33.3"     y="33.3"  angle="45."/>
+        </murs>
+
+    </level>
+</levels>

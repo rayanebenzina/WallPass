@@ -4,41 +4,28 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.BodyType;
-import org.jbox2d.dynamics.Filter;
 
 
 public class Balle extends GameObject {
     private Circle c;
 
-    public Balle(GameWorld world, Viewport viewport, float x, float y, float vx, float vy, float radius) {
+    Balle(GameWorld world, Viewport viewport, float x, float y, float vx, float vy, float radius) {
         super(world, BodyType.DYNAMIC, new Vec2(x, y), new Vec2(vx, vy), 0, 0x0001, Color.argb(255, 255, 115, 35));
         c = new Circle(body, viewport, 0, 0, radius);
         c.setFilter(0x0001, 0x0002 | 0x0004);
-    }
-
-    public void setCollidingWall()
-    {
-        c.setFilter(0x0001, 0x0002 | 0x0004);
-        paint.setAlpha(255);
-    }
-
-    public void setNoCollindingWall()
-    {
-        c.setFilter(0x0001, 0x0002);
-        paint.setAlpha(155);
     }
 
     public void draw(Canvas canvas)
     {
         c.draw(canvas,paint);
     }
-    public void setSensor(boolean sensor)
+    void setSensor(boolean sensor)
     {
         body.getFixtureList().setSensor(sensor);
         paint.setAlpha(sensor?155:255);
     }
 
-    public boolean isSensor()
+    boolean isSensor()
     {
         return c.f.isSensor();
     }

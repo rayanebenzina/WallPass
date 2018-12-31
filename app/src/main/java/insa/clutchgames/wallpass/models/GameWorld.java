@@ -15,15 +15,15 @@ import org.jbox2d.dynamics.contacts.Contact;
 public abstract class GameWorld extends World {
 
     protected Viewport viewport;
-    public int nbMursTouches = 0;
-    protected float dt = 1f/60f;
-    public float ratio;
+    private int nbMursTouches = 0;
+    float dt = 1f/60f;
+    float ratio;
     public Vec2 screen;
     private  final Handler handler = new Handler();
     private Runnable r ;
-    protected Balle balle;
-    boolean continuer = true;
-    protected long counter = 0;
+    Balle balle;
+    boolean continuer = false;
+    long counter = 0;
 
     public GameWorld()
     {
@@ -38,7 +38,7 @@ public abstract class GameWorld extends World {
         viewport.setCenter(0,0);
         viewport.setTransform(new Mat22(width/100,0,0,width/100));
         balle = new Balle(this,viewport, 50,90,0,-40,3);
-        r = new Runnable() {@Override public void run() {if(nbMursTouches == 0){balle.setSensor(false);}}};
+        r = new Runnable() {@Override public void run() {if(nbMursTouches == 0)balle.setSensor(false);}};
     }
 
     public abstract void step();
@@ -51,6 +51,14 @@ public abstract class GameWorld extends World {
 
         @Override
         public void preSolve(Contact contact, Manifold manifold) {
+            int A = (int) contact.getFixtureA().getUserData();
+            int B = (int) contact.getFixtureB().getUserData();
+
+            if((A == LIMITE && B == BALLE)|| (A==BALLE && B== LIMITE))
+            {
+                if(counter>20)
+                    continuer=false;
+            }
         }
         @Override
         public void postSolve(Contact contact, ContactImpulse contactImpulse) {
@@ -65,7 +73,6 @@ public abstract class GameWorld extends World {
             {
                 if(counter>20)
                     continuer=false;
-                System.out.println(counter);
             }
             if((A == MUR && B == BALLE) || ( A == BALLE && B == MUR))
             {
@@ -77,11 +84,7 @@ public abstract class GameWorld extends World {
         public void endContact(Contact contact) {
             int A = (int) contact.getFixtureA().getUserData();
             int B = (int) contact.getFixtureB().getUserData();
-            if( (A == LIMITE && B == BALLE) || (A==BALLE && B== LIMITE))
-            {
-
-            }
-            else if((A == MUR && B == BALLE) || ( A == BALLE && B == MUR))
+            if((A == MUR && B == BALLE) || ( A == BALLE && B == MUR))
             {
                 nbMursTouches--;
                 if(nbMursTouches==0) balle.setSensor(false);
@@ -91,15 +94,19 @@ public abstract class GameWorld extends World {
 
     public void onClick()
     {
-        if(balle.isSensor())
+        if(continuer)
         {
-            if(nbMursTouches==0)balle.setSensor(false);
+            if (balle.isSensor())
+            {
+                if (nbMursTouches == 0) balle.setSensor(false);
+            }
+            else
+            {
+                balle.setSensor(true);
+                handler.removeCallbacks(r);
+                handler.postDelayed(r, 300);
+            }
         }
-        else
-        {
-            balle.setSensor(true);
-            handler.removeCallbacks(r);
-            handler.postDelayed(r,600);
-        }
+        if (counter==0)continuer=true;
     }
 }

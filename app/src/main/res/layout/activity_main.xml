@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/buttons"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -14,9 +15,39 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="50dp"
         android:focusable="true"
         android:clickable="true"
         android:contentDescription="@string/image_description"/>
+    <LinearLayout
+        android:id="@+id/choixmode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_alignParentBottom="true"
+        android:visibility="gone"
+        android:layout_centerHorizontal="true">
+    <ImageButton
+        android:id="@+id/buttonlevelmode"
+        android:background="@drawable/levelmode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="10dp"
+        android:focusable="true"
+        android:clickable="true"
+        />
+    <ImageButton
+        android:id="@+id/buttoninfinitemode"
+        android:background="@drawable/infinitemode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="10dp"
+        android:focusable="true"
+        android:clickable="true" />
+    </LinearLayout>
 
 </RelativeLayout>

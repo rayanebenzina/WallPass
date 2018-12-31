@@ -21,11 +21,12 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     private GameLoopThread gameThread;
     private GameWorld w;
 
-    public GameView(Context context) {
+    public GameView(Context context,int mode) {
         super(context);
         getHolder().addCallback(this);
         gameThread=new GameLoopThread(this);
-        w = new LevelGameWorld();
+        if(mode==1) w = new InfiniteGameWorld();
+        else if(mode==2) w = new LevelGameWorld(context);
     }
     public void update()
     {
